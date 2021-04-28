@@ -1,0 +1,32 @@
+{
+	"folders": [
+		{
+			"name": "Usbtmc",
+			"path": "."
+		}
+	],
+	"settings": {
+		"editor.rulers": [
+			{
+				"column": 79,
+				"color": "#424142"
+			},
+			100,
+			{
+				"column": 120,
+				"color": "#ff0000"
+			},
+		],
+		"files.exclude": {
+			"**/.git": true,
+			"**/.svn": true,
+			"**/.hg": true,
+			"**/CVS": true,
+			"**/.DS_Store": true,
+			"**/__pycache__": true,
+			"**/.vscode": true,
+			"*.code-workspace": true,
+			".virtual": true
+		},
+	}
+}

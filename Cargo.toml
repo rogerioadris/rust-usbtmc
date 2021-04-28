@@ -1,0 +1,17 @@
+[package]
+name = "rust-usbtmc"
+version = "0.1.0"
+authors = ["Rogério Adriano <rogerioadris@gmail.com>"]
+edition = "2018"
+license = "MIT OR Apache-2.0"
+keywords = ["usb", "usbtmc", "instruments"]
+categories = ["hardware-support", "os"]
+
+description = "USBTMC driver for controlling instruments over USB."
+homepage = "https://github.com/rogerioadris/rust-usbtmc"
+repository = "https://github.com/rogerioadris/rust-usbtmc"
+documentation = "https://github.com/rogerioadris/rust-usbtmc"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
