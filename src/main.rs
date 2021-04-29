@@ -5,13 +5,11 @@ const VID: u16 = 0x0699;
 const PID: u16 = 0x0368;
 
 fn main() {
-    let start = Instant::now();
-
     let mut instr = Instrument::new(VID, PID);
 
+    let start = Instant::now();
     instr.write("SELECT:CH1 1").unwrap();
-    instr.ask("*IDN?").unwrap();
-    instr.read().unwrap();
+    println!("Ask: {}", instr.ask("*IDN?").unwrap());
 
     let duration = start.elapsed();
     println!("Time elapsed is: {:?}", duration);
