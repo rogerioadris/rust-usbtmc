@@ -28,12 +28,12 @@ const VID: u16 = 0x0699; // Vendor
 const PID: u16 = 0x0368; // Product
 
 // Bus and Device settings of the first instrument
-const FIRST_BUS: u8 = 0x01; // Bus
-const FIRST_ADDRESS: u8 = 0x01; // Device
+const FIRST_BUS: u8 = 0x01;
+const FIRST_ADDRESS: u8 = 0x01;
 
 // Bus and Device settings of the second instrument
-const SECOND_BUS: u8 = 0x01; // Bus
-const SECOND_ADDRESS: u8 = 0x01; // Device
+const SECOND_BUS: u8 = 0x03;
+const SECOND_ADDRESS: u8 = 0x02;
 
 fn main() {
     // Select first specific Instrument.
@@ -42,11 +42,11 @@ fn main() {
     // Select second specific Instrument.
     let mut instr2 = Instrument::new_filtered(VID, PID, SECOND_BUS, SECOND_ADDRESS);
 
-    // Command Osciloscope
+    // Execute commands on the first Instrument
     instr1.write("SELECT:CH1 1").unwrap();
     println!("Ask: {}", instr1.ask("*IDN?").unwrap());
 
-    // Command Osciloscope
+    // Execute commands on the second Instrument
     instr2.write("SELECT:CH2 1").unwrap();
     println!("Ask: {}", instr2.ask("*IDN?").unwrap());
 }
