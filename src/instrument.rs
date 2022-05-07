@@ -25,6 +25,8 @@ pub struct Endpoint {
 pub struct Instrument {
     pub vid: u16,
     pub pid: u16,
+    pub bus: Option<u8>,
+    pub address: Option<u8>,
     last_btag: u8,
     max_transfer_size: u32,
     timeout: Duration,
@@ -38,6 +40,23 @@ impl Instrument {
         Instrument {
             vid,
             pid,
+            bus: None,
+            address: None,
+            last_btag: 0,
+            max_transfer_size: 1024 * 1024,
+            timeout: Duration::from_secs(1),
+        }
+    }
+
+    ///
+    ///
+    ///
+    pub fn new_filtered(vid: u16, pid: u16, bus: u8, address: u8) -> Instrument {
+        Instrument {
+            vid,
+            pid,
+            bus: Some(bus),
+            address: Some(address),
             last_btag: 0,
             max_transfer_size: 1024 * 1024,
             timeout: Duration::from_secs(1),
@@ -191,13 +210,21 @@ impl Instrument {
             };
 
             if device_desc.vendor_id() == self.vid && device_desc.product_id() == self.pid {
-                match device.open() {
-                    Ok(handle) => return Ok((device, device_desc, handle)),
-                    Err(_) => continue,
+                if self.bus.is_some() && self.address.is_some() {
+                    if device.bus_number() == self.bus.unwrap() && device.address() == self.address.unwrap() {
+                        match device.open() {
+                            Ok(handle) => return Ok((device, device_desc, handle)),
+                            Err(_) => continue,
+                        }
+                    }
+                } else {
+                    match device.open() {
+                        Ok(handle) => return Ok((device, device_desc, handle)),
+                        Err(_) => continue,
+                    }
                 }
             }
         }
-
         return Err(UsbtmcError::Exception);
     }
 
