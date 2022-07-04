@@ -33,9 +33,7 @@ pub struct Instrument {
 }
 
 impl Instrument {
-    ///
-    ///
-    ///
+    /// Create a new Instrument with speciifed VID and PID.
     pub fn new(vid: u16, pid: u16) -> Instrument {
         Instrument {
             vid,
@@ -63,37 +61,27 @@ impl Instrument {
         }
     }
 
-    ///
-    ///
-    ///
+    /// Return Instrument information
     pub fn info(&self) -> UsbtmcResult<String> {
         Ok(String::new())
     }
 
-    ///
-    ///
-    ///
+    /// Write a message to the Instrument
     pub fn write(&mut self, message: &str) -> UsbtmcResult<()> {
         self.write_raw(message.as_bytes())
     }
 
-    ///
-    ///
-    ///
+    /// Write a byte array to the Instrument
     pub fn write_raw(&mut self, data: &[u8]) -> UsbtmcResult<()> {
         self.write_data(data, false)
     }
 
-    ///
-    ///
-    ///
+    /// Read string from the instrument
     pub fn read(&mut self) -> UsbtmcResult<String> {
         self.read_raw()
     }
 
-    ///
-    ///
-    ///
+    /// Read string from the instrument
     pub fn read_raw(&mut self) -> UsbtmcResult<String> {
         let (mut device, device_desc, mut handle) = self.open_device()?;
 
@@ -128,24 +116,17 @@ impl Instrument {
         }
     }
 
-    ///
-    ///
-    ///
+    /// Send a message and wait for response
     pub fn ask(&mut self, data: &str) -> UsbtmcResult<String> {
         self.ask_raw(data.as_bytes())
     }
 
-    ///
-    ///
-    ///
+    /// Send data and wait for response
     pub fn ask_raw(&mut self, data: &[u8]) -> UsbtmcResult<String> {
         self.write_data(data, true)?;
         self.read_raw()
     }
 
-    ///
-    ///
-    ///
     fn pack_bulk_out_header(&mut self, msgid: u8) -> Vec<u8> {
         let btag: u8 = (self.last_btag % 255) + 1;
         self.last_btag = btag;
@@ -154,9 +135,6 @@ impl Instrument {
         vec![msgid, btag, !btag & 0xFF, 0x00]
     }
 
-    ///
-    ///
-    ///
     fn pack_dev_dep_msg_out_header(&mut self, transfer_size: usize, eom: bool) -> Vec<u8> {
         let mut hdr = self.pack_bulk_out_header(USBTMC_MSGID_DEV_DEP_MSG_OUT);
 
@@ -167,9 +145,6 @@ impl Instrument {
         hdr
     }
 
-    ///
-    ///
-    ///
     fn pack_dev_dep_msg_in_header(&mut self, transfer_size: usize, term_char: u8) -> Vec<u8> {
         let mut hdr = self.pack_bulk_out_header(USBTMC_MSGID_DEV_DEP_MSG_IN);
 
@@ -181,9 +156,6 @@ impl Instrument {
         hdr
     }
 
-    ///
-    ///
-    ///
     fn little_write_u32(&self, size: u32, len: u8) -> Vec<u8> {
         let mut buf = vec![0; len as usize];
         LittleEndian::write_u32(&mut buf, size);
@@ -191,9 +163,6 @@ impl Instrument {
         buf
     }
 
-    ///
-    ///
-    ///
     fn open_device(
         &self,
     ) -> UsbtmcResult<(Device<Context>, DeviceDescriptor, DeviceHandle<Context>)> {
@@ -228,9 +197,6 @@ impl Instrument {
         return Err(UsbtmcError::Exception);
     }
 
-    ///
-    ///
-    ///
     fn find_endpoint(
         &mut self,
         device: &mut Device<Context>,
@@ -265,9 +231,6 @@ impl Instrument {
         None
     }
 
-    ///
-    ///
-    ///
     fn write_data(&mut self, data: &[u8], command: bool) -> UsbtmcResult<()> {
         let offset: usize = 0;
         let mut eom: bool = false;
