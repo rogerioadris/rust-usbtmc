@@ -164,7 +164,7 @@ impl Instrument {
     }
 
     fn open_device(
-        &self,
+        &mut self,
     ) -> UsbtmcResult<(Device<Context>, DeviceDescriptor, DeviceHandle<Context>)> {
         let context = Context::new().unwrap();
         let devices = match context.devices() {
@@ -188,7 +188,11 @@ impl Instrument {
                     }
                 } else {
                     match device.open() {
-                        Ok(handle) => return Ok((device, device_desc, handle)),
+                        Ok(handle) => {
+                            self.bus = Some(handle.device().bus_number());
+                            self.address = Some(handle.device().address());
+                            return Ok((device, device_desc, handle));
+                        }
                         Err(_) => continue,
                     }
                 }
