@@ -82,7 +82,7 @@ impl Instrument {
 
     /// Read string from the instrument
     pub fn read_raw(&mut self) -> UsbtmcResult<String> {
-        let (mut device, device_desc, mut handle) = self.open_device()?;
+        let (mut device, device_desc, handle) = self.open_device()?;
 
         match self.find_endpoint(&mut device, &device_desc, TransferType::Bulk, Direction::In) {
             Some(endpoint) => {
@@ -236,7 +236,7 @@ impl Instrument {
         let mut eom: bool = false;
         let mut num: usize = data.len();
 
-        let (mut device, device_desc, mut handle) = self.open_device()?;
+        let (mut device, device_desc, handle) = self.open_device()?;
 
         match self.find_endpoint(
             &mut device,
