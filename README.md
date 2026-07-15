@@ -51,3 +51,30 @@ fn main() {
     println!("Ask: {}", instr2.ask("*IDN?").unwrap());
 }
 ```
+
+## Identification
+
+`info()` is a shortcut for `ask("*IDN?")`:
+
+```rust
+println!("Info: {}", instr.info().unwrap());
+```
+
+## Timeout and transfer size
+
+Both default to 1 second and 1 MiB respectively; override them before the first `read`/`write`/`ask` call:
+
+```rust
+use std::time::Duration;
+
+instr.set_timeout(Duration::from_secs(5));
+instr.set_max_transfer_size(64 * 1024);
+```
+
+## Connection lifetime
+
+The USB device is opened once, on the first `read`/`write`/`ask`/`info` call, and the handle is reused for every call after that instead of reopening the device each time. The connection closes (and the kernel driver reattaches) when the `Instrument` is dropped.
+
+## Errors
+
+All fallible calls return `Result<T, UsbtmcError>`. `UsbtmcError` implements `std::error::Error`/`Display`, so it composes with `?` and error-handling crates like `anyhow`.
